@@ -1,0 +1,14 @@
+# task 1
+
+cat > .my.cnf
+[client]
+user=root
+password=Dvk911
+
+# task 2
+
+create database example;
+
+# task 3
+
+mysqldump examples > examples1.sql
