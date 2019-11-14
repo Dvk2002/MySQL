@@ -11,4 +11,4 @@ create database example;
 
 # task 3
 
-mysqldump examples > examples1.sql
+mysqldump example > example.sql
