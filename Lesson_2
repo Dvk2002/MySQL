@@ -9,6 +9,8 @@ password=Dvk911
 
 create database example;
 
+CREATE TABLE users (id int, name VARCHAR(255));
+
 # task 3
 
 mysqldump example > example.sql
