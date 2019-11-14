@@ -14,3 +14,7 @@ CREATE TABLE users (id int, name VARCHAR(255));
 # task 3
 
 mysqldump example > example.sql
+
+# task 4
+
+ mysqldump --where="true limit 100" mysql help_keyword > help_keyword_back.sql
