@@ -1,0 +1,5 @@
+# task_3
+
+На мой взгляд, в плане оптимизации структуры целесообразно в users оставить id, first_name u last_name.
+Все остальное перенести в profiles. Также на мой взгляд, можно в profiles добавить поле community_id, а
+таблицу communities_users убрать.
