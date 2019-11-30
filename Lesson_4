@@ -1,0 +1,19 @@
+# "Лайкировать" ("дизлайкировать"), то есть поставить метку, можно любой элемент любой таблицы, идентифицировав его по внешнему ключу . 
+# Также целесообразно наличие субъекта и временной характеристики. 
+
+
+CREATE TABLE like_activities (
+media_id INT UNSIGNED default null,
+message_id INT UNSIGNED default null,
+user_id INT UNSIGNED not null,
+created_at datetime NOT NULL,
+  CONSTRAINT uk_key_1  unique (media_id,  user_id),
+  CONSTRAINT uk_key_2  unique (message_id,  user_id),
+  CONSTRAINT fk_media_id FOREIGN KEY (media_id) REFERENCES media(id),
+  CONSTRAINT fk_message_id FOREIGN KEY (message_id) REFERENCES messages(id),
+  CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT media_id_message_id_1 CHECK (media_id is NULL or message_id is NULL),
+  CONSTRAINT media_id_message_id_2 CHECK (media_id is not NULL or message_id is not NULL)
+  );
+  
+  # Аналогично `dislike_activities`
