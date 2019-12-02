@@ -29,11 +29,7 @@ where MONTH(birthday_at) = 5 or MONTH(birthday_at) = 8 ;
 
 # task 1.5
 
-select
-name,
-birthday_at
-from users
-where MONTH(birthday_at) = 5 or MONTH(birthday_at) = 8 ;
+SELECT * FROM catalogs WHERE id IN (5, 1, 2) order by case when id = 5 then 1 when id = 1 then 2  when id = 2 then 3 end ;
 
 
 
@@ -50,3 +46,8 @@ count(*) as total,
 DAYNAME(MAKEDATE(YEAR(now()),DAYOFYEAR(birthday_at))) as days_of_week
 from users
 group by days_of_week;
+
+# task 2.3
+
+SELECT round(exp(SUM(log(id)))) product FROM 
+catalogs;
