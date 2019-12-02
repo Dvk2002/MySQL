@@ -13,7 +13,40 @@ alter table users modify created_at datetime ;
 
 
 
+
 # task 1.3
 
 select product_value from storehouses_products 
 order by case when product_value = 0 then 123456 else product_value end;
+
+# task 1.4
+
+select
+name,
+birthday_at
+from users
+where MONTH(birthday_at) = 5 or MONTH(birthday_at) = 8 ;
+
+# task 1.5
+
+select
+name,
+birthday_at
+from users
+where MONTH(birthday_at) = 5 or MONTH(birthday_at) = 8 ;
+
+
+
+# task 2.1
+
+select 
+avg(to_days(now()) - to_days(birthday_at))/365.25 
+from users;
+
+# task 2.2
+
+select
+count(*) as total,
+DAYNAME(MAKEDATE(YEAR(now()),DAYOFYEAR(birthday_at))) as days_of_week
+from users
+group by days_of_week;
