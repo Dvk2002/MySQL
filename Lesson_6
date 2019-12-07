@@ -11,3 +11,6 @@ SELECT COUNT(*) as q, profiles.sex  from likes , profiles WHERE likes.user_id = 
 GROUP BY profiles.sex ORDER BY q DESC LIMIT 1;
 
 # task 5
+
+SELECT concat(first_name, ' ', last_name) as soc_name from users
+WHERE id in (SELECT user_id from likes GROUP by user_id  order by (SELECT COUNT(id) from  likes GROUP by user_id)) limit 10;
