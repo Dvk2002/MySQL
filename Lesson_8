@@ -1,0 +1,11 @@
+# task 2
+
+SELECT concat(first_name, ' ', last_name) as soc_name from users 
+WHERE id = (select COUNT(*) AS tot from messages where to_user_id = 88 group by from_user_id 
+HAVING from_user_id in (SELECT user_id from friendship where friend_id = 88) order by tot DESC limit 1);
+
+
+# task 4
+
+SELECT COUNT(*) as q, profiles.sex  from likes , profiles WHERE likes.user_id = profiles.user_id
+GROUP BY profiles.sex ORDER BY q DESC LIMIT 1;
