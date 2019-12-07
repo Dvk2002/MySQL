@@ -1,16 +1,28 @@
-# task 2
+# task 1
++
 
+# task 2
+# Под "больше всех общался" понимается отправлял сообщения.
 SELECT concat(first_name, ' ', last_name) as soc_name from users 
 WHERE id = (select COUNT(*) AS tot from messages where to_user_id = 88 group by from_user_id 
 HAVING from_user_id in (SELECT user_id from friendship where friend_id = 88) order by tot DESC limit 1);
 
+# task 3
+# "Самые молодые пользователи" рассматриваются среди тех, кто получал "лайки". 
+
+
+SELECT SUM(quality) FROM (SELECT COUNT(*) as quality, p.birthday, m.user_id from likes l, profiles p, media m  WHERE
+l.target_id = m.media_type_id AND m.user_id = p.user_id group by m.user_id ORDER BY p.birthday DESC limit 10) as total;
+
 
 # task 4
 
-SELECT COUNT(*) as q, profiles.sex  from likes , profiles WHERE likes.user_id = profiles.user_id
-GROUP BY profiles.sex ORDER BY q DESC LIMIT 1;
+SELECT COUNT(*) as quality, profiles.sex  from likes , profiles WHERE likes.user_id = profiles.user_id
+GROUP BY profiles.sex ORDER BY quality DESC LIMIT 1;
 
 # task 5
+#  В качестве "активности в использовании сети" рассматриваются "лайки".
+
 
 SELECT concat(first_name, ' ', last_name) as soc_name from users
 WHERE id in (SELECT user_id from likes GROUP by user_id  order by (SELECT COUNT(id) from  likes GROUP by user_id)) limit 10;
