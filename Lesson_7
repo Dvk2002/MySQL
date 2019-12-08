@@ -1,0 +1,19 @@
+# task 1
+
+SELECT name FROM users u
+
+WHERE u.id in (users_id FROM orders);
+
+# task 2
+
+SELECT p.name, c.name as catalogs FROM products p, catalogs c
+WHERE c.name = p.catalog_id AND p.name LIKE '%ddr%';
+
+# task 3
+
+SELECT t.id, t.`from`, c.name as `to` 
+FROM (SELECT f.id, c.name as `from`, f.`to` 
+			FROM flights f
+				LEFT JOIN cities c on f.`from`= c.label) as t
+					LEFT JOIN cities c on t.`to` = c.label
+				ORDER by t.id;
