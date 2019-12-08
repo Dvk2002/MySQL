@@ -12,12 +12,14 @@ SELECT filename FROM media WHERE user_id IN (
 );
 
 # task 2
-# Под "больше всех общался" понимается отправлял сообщения.
-SELECT concat(first_name, ' ', last_name) as soc_name from users 
-WHERE id = (select COUNT(*) AS tot from messages where to_user_id = 88 
-group by from_user_id HAVING from_user_id in 
-(SELECT user_id from friendship where friend_id = 88 AND status_id IN 
-(SELECT id FROM friendship_statuses WHERE name != 'Rejected')) order by tot DESC limit 1);
+#  Под "больше всех общался" понимается отправлял и получал сообщения.
+SELECT COUNT(*) FROM (SELECT from_user_id as tot FROM messages  where to_user_id = 88 AND
+from_user_id in((SELECT user_id from friendship where friend_id = 88 ))
+UNION ALL
+SELECT to_user_id FROM messages where from_user_id = 88 AND
+from_user_id in((SELECT user_id from friendship where friend_id = 88))) as tot
+GROUP BY tot
+ORDER BY tot DESC LIMIT 1;
 
 # task 3
 # "Самые молодые пользователи" рассматриваются среди тех, кто получал "лайки". 
