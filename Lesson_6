@@ -1,11 +1,23 @@
 # task 1
-+
+SELECT filename FROM media WHERE user_id IN (
+  (SELECT friend_id 
+  FROM friendship 
+  WHERE user_id = 3 or friend_id = 3
+    AND confirmed_at IS NOT NULL 
+    AND status_id IN (
+      SELECT id FROM friendship_statuses 
+        WHERE name != 'Rejected'
+    )
+  ) 
+);
 
 # task 2
 # Под "больше всех общался" понимается отправлял сообщения.
 SELECT concat(first_name, ' ', last_name) as soc_name from users 
-WHERE id = (select COUNT(*) AS tot from messages where to_user_id = 88 group by from_user_id 
-HAVING from_user_id in (SELECT user_id from friendship where friend_id = 88) order by tot DESC limit 1);
+WHERE id = (select COUNT(*) AS tot from messages where to_user_id = 88 
+group by from_user_id HAVING from_user_id in 
+(SELECT user_id from friendship where friend_id = 88 AND status_id IN 
+(SELECT id FROM friendship_statuses WHERE name != 'Rejected')) order by tot DESC limit 1);
 
 # task 3
 # "Самые молодые пользователи" рассматриваются среди тех, кто получал "лайки". 
