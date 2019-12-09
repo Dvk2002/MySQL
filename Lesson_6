@@ -20,7 +20,7 @@ ORDER BY tot DESC LIMIT 1;
 
 
 SELECT SUM(quality) FROM (SELECT COUNT(*) as quality, p.birthday, m.user_id from likes l, profiles p, media m  WHERE
-l.target_id = m.media_type_id AND m.user_id = p.user_id group by m.user_id ORDER BY p.birthday DESC limit 10) as total;
+l.target_id = m.id AND m.user_id = p.user_id group by m.user_id ORDER BY p.birthday DESC limit 10) as total;
 
 
 # task 4
