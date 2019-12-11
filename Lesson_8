@@ -1,8 +1,9 @@
 # task_1
 
-ALTER TABLE communities_users ADD
-CONSTRAINT communities_users_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
+ALTER TABLE communities_users 
+ADD CONSTRAINT communities_users_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
 ON DELETE CASCADE;
+ADD CONSTRAINT communities_users_community_id_fk FOREIGN KEY (community_id) REFERENCES communities(id);
 
 
 ALTER TABLE friendship 
@@ -61,7 +62,10 @@ MODIFY friend_id int(10) UNSIGNED,
 ADD CONSTRAINT privacy_except_user_friend_id_fk FOREIGN KEY (friend_id) REFERENCES users(id)
 ON DELETE SET NULL;
 
-
+ALTER TABLE privacy_except_user
+MODIFY privacy_id int(10) UNSIGNED,
+ADD CONSTRAINT privacy_except_user_privacy_id_fk FOREIGN KEY (privacy_id) REFERENCES privacy(id)
+ON DELETE SET NULL;
 
 
 # task_2
