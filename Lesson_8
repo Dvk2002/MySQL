@@ -68,5 +68,19 @@ ADD CONSTRAINT privacy_except_user_privacy_id_fk FOREIGN KEY (privacy_id) REFERE
 ON DELETE SET NULL;
 
 
-# task_2
+# task_2.2
+
+SELECT concat(u.first_name, ' ', u.last_name)  soc_name, count(m.id) tot_mess 
+from users as u
+	JOIN messages m
+		ON m.from_user_id = u.id or m.to_user_id = u.id
+	JOIN friendship f
+		ON f.friend_id = u.id
+	WHERE f.friend_id=50 AND (m.to_user_id = 50 or m.from_user_id=50)
+	GROUP BY soc_name
+	ORDER BY tot_mess desc
+	LIMIT 1;
+	
+
+
 
