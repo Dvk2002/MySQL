@@ -3,7 +3,8 @@
 
 # task 2
 #  Под "больше всех общался" понимается отправлял и получал сообщения.
-SELECT COUNT(*) FROM (SELECT from_user_id as tot FROM messages  where to_user_id = 88
+SELECT concat(first_name, ' ', last_name) as soc_name from users 
+WHERE id  = (SELECT COUNT(*) FROM (SELECT from_user_id as tot FROM messages  where to_user_id = 88
 AND
 from_user_id in((SELECT user_id from friendship where friend_id = 88 AND status_id IN 
 (SELECT id FROM friendship_statuses WHERE name != 'Rejected')))
@@ -13,7 +14,10 @@ AND
 to_user_id in((SELECT user_id from friendship where friend_id = 88 AND status_id IN 
 (SELECT id FROM friendship_statuses WHERE name != 'Rejected')))) as tot
 GROUP BY tot
-ORDER BY tot DESC LIMIT 1;
+ORDER BY tot 
+DESC LIMIT 1
+);
+
 
 # task 3
 # "Самые молодые пользователи" рассматриваются среди тех, кто получал "лайки". 
