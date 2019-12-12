@@ -1,8 +1,9 @@
 # task 1
 
-SELECT name FROM users u
-
-WHERE u.id in (users_id FROM orders);
+SELECT u.name 
+FROM users u
+JOIN orders o
+ON u.id = users_id;
 
 # task 2
 
