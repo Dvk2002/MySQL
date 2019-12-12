@@ -81,6 +81,34 @@ from users as u
 	ORDER BY tot_mess desc
 	LIMIT 1;
 	
+# task_2.3
 
+SELECT SUM(young_likes) FROM (SELECT COUNT(*) as young_likes 
+ FROM likes l
+ JOIN media m
+ ON l.target_id = m.id
+ JOIN profiles p
+ ON m.user_id = p.user_id
+ group by m.user_id
+ ORDER BY p.birthday
+ DESC LIMIT 10) as sum;
 
+# task_2.4
 
+SELECT COUNT(*) as quality, p.sex
+FROM likes l
+JOIN profiles p
+ON l.user_id = p.user_id
+GROUP BY p.sex
+ORDER BY quality DESC
+LIMIT 1;
+
+# task_2.
+SELECT concat(first_name, ' ', last_name) as soc_name, COUNT(l.id) as quality
+FROM  users u
+LEFT JOIN likes l
+ON u.id = l.user_id
+GROUP BY 
+u.id
+ORDER BY quality
+LIMIT 10;
