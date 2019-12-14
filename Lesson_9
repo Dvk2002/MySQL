@@ -21,6 +21,9 @@ select updated_at, not isnull(updated_at) as `bool` from users ;
 # CREATE VIEW update as
 select updated_at
 
+# task_1_4
+DELETE FROM posts WHERE id not in (SELECT id FROM (select * from posts order by created_at limit 5) as s);
+
 
 
 
