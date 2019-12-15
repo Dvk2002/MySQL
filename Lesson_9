@@ -29,7 +29,7 @@ DELETE FROM posts WHERE id not in (SELECT id FROM (select * from posts order by 
 
 
 
-# task 2.1
+# task_2.1
 
 CREATE USER 'user1'@'localhost' identified by 'User123';
 CREATE USER 'admin1'@'localhost' identified by 'Admin123';
@@ -37,12 +37,29 @@ grant select on shop.* to user1;
 grant all on *.* to admin1;
 
 
-# task 2.2
+# task_2.2
 
 create view username as select a.id, a.name
 from accounts a;
 create user 'user_read'@'localhost' identified by 'User123';
 grant select on username.* to 'user_read'@'localhost';
+
+
+
+# task_3.1
+create function hello()
+returns text deterministic
+begin
+case
+WHEN CURRENT_TIME() BETWEEN '06:00:00' AND '12:00:00'
+then RETURN 'Доброе утро';
+WHEN CURRENT_TIME() BETWEEN '12:00:00' AND '18:00:00'
+then RETURN 'Доброй день';
+WHEN CURRENT_TIME() BETWEEN '18:00:00' AND '24:00:00'
+then RETURN 'Добрый вечер';
+ELSE RETURN 'Доброй ночи';
+end case;
+end//
 
 
 
