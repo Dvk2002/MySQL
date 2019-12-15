@@ -61,5 +61,24 @@ ELSE RETURN 'Доброй ночи';
 end case;
 end//
 
+# task_3.2
 
+CREATE TRIGGER check_products_insert BEFORE INSERT on products 
+FOR EACH ROW
+BEGIN 
+	IF NEW.name IS  NULL AND NEW.description IS  NULL
+	THEN
+	SIGNAL SQLSTATE '45000' SET message_text = 'Null means';
+END IF;
+END//
+
+CREATE TRIGGER check_products_update BEFORE UPDATE on products 
+FOR EACH ROW
+BEGIN 
+	IF ((NEW.name IS  NULL AND NEW.description IS  NULL) OR (NEW.name IS  NULL AND OLD.description IS  NULL)
+	OR (OLD.name IS  NULL AND NEW.description IS  NULL))
+	THEN
+	SIGNAL SQLSTATE '45000' SET message_text = 'Null means';
+END IF;
+END//
 
