@@ -82,3 +82,21 @@ BEGIN
 END IF;
 END//
 
+# task_3.3
+
+CREATE FUNCTION FIBONACCI(n int)
+RETURNS int DETERMINISTIC
+BEGIN
+	DECLARE f, i, p, q int(255);
+SET i = 1, F = 1, p = 1, q= 0;
+	WHILE i != n-1 do 
+		set q = F;
+		set F = F+p;
+		set p = q;
+		set i = i+1;
+	END WHILE;
+RETURN(F);
+END//
+
+
+
