@@ -1,0 +1,7 @@
+# task_1
+
+CREATE INDEX users_first_name_last_name_idx ON users(first_name,last_name);
+CREATE INDEX friendship_friend_id_idx ON friendship (friend_id);
+CREATE INDEX likes_user_id_target_id_idx ON likes(user_id, target_id);
+CREATE INDEX profiles_user_id_sex_birthday_idx ON profiles(user_id,sex,birthday);
+CREATE INDEX messages_from_user_id_to_user_id_idx ON messages (from_user_id,to_user_id);
