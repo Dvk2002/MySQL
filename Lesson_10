@@ -5,3 +5,18 @@ CREATE INDEX friendship_friend_id_idx ON friendship (friend_id);
 CREATE INDEX likes_user_id_target_id_idx ON likes(user_id, target_id);
 CREATE INDEX profiles_user_id_sex_birthday_idx ON profiles(user_id,sex,birthday);
 CREATE INDEX messages_from_user_id_to_user_id_idx ON messages (from_user_id,to_user_id);
+
+# task_2
+
+SELECT DISTINCT c.name,
+AVG(cu.user_id) OVER name AS average,
+MIN(p.birthday) OVER name AS oldest,
+MAX(p.birthday) OVER name AS youngest,
+SUM(cu.user_id) OVER name AS total_group,
+SUM(cu.user_id) OVER()    AS total,
+ROUND(SUM(cu.user_id) OVER name/SUM(cu.user_id) OVER() * 100, 2) AS '%%'
+FROM 
+(communities c
+join communities_users cu ON c.id = cu.community_id
+join profiles p ON p.user_id = cu.user_id)
+WINDOW name AS (PARTITION BY c.name);
