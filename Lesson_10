@@ -20,3 +20,61 @@ FROM
 join communities_users cu ON c.id = cu.community_id
 join profiles p ON p.user_id = cu.user_id)
 WINDOW name AS (PARTITION BY c.name);
+
+# task_3
+
+-- Добавляем столбец Activities в таблицу users --
+
+ALTER TABLE users ADD Activities int;
+SELECT * FROM users u;
+
+-- Индексируем --
+
+CREATE INDEX users_Activities ON users (Activities);
+
+--Заполняем его--
+
+UPDATE users u, (select u.id as id, COUNT(DISTINCT l.id) + COUNT(DISTINCT ms.id) + COUNT(DISTINCT md.id) as act
+FROM
+users u
+LEFT JOIN 
+messages ms
+on
+u.id = ms.from_user_id
+LEFT JOIN likes l
+on l.user_id = u.id
+LEFT JOIN media md
+ON u.id= md.user_id
+GROUP BY u.id) as acted
+SET 
+Activities = acted.act
+WHERE acted.id = u.id;
+
+-- Образец триггера--
+
+CREATE TRIGGER messages_update_user_activities AFTER INSERT ON messages
+FOR EACH ROW 
+BEGIN 
+	UPDATE users u,
+	(SELECT ms.from_user_id as id
+	FROM
+	users u
+	LEFT JOIN 
+	messages ms
+	on ms.from_user_id = u.id
+	WHERE ms.id = ms.NEW.id) as updated 
+	SET
+	u.Activities=u.Activities+1
+	WHERE updated.id = u.id;
+END//
+
+-- Код --
+
+SELECT u.id FROM users u
+ORDER BY Activities
+LIMIT 10;
+
+ -- Еще один вариант создать представление и его проиндексировать, но у меня по нему не создается индекс,
+-- нужно разбираться
+ 
+ 
