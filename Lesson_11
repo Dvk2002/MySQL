@@ -16,3 +16,22 @@ BEGIN
 	INSERT INTO logs(sourse, name) VALUES
 	('catalog', new.name);
 END//
+
+
+# task_2.1
+
+sadd ip_address 192.168.0.1 192.168.0.2 192.168.0.3
+
+
+# task_2.2
+
+set name email
+set email name
+get name
+get email
+
+# task_2.3
+
+db.shop.insert({"catalog":[{id:["1","2","3"]},{"name":["comp","phone","tv"]}]})
+db.shop.insert({products:[{id:'1'},{name:'tv samsung'},{description:'korea'},{price:'200'},{catalog_id:'2'}]})
+db.shop.insert({users:[{id:''},{name:''},{birthday_at:''},{created_at:''}]})
