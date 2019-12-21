@@ -1,4 +1,4 @@
-# task_1
+# task_1.1
 
 CREATE TABLE logs (
 id int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -18,6 +18,21 @@ BEGIN
 END//
 
 
+# task_1.2
+
+CREATE PROCEDURE million_users ()
+BEGIN
+	DECLARE i int (255);
+	SET i = 1;
+	WHILE i<10 Do
+	INSERT INTO users (first_name, last_name, email, phone) VALUES
+	(CONCAT('Иван',i), CONCAT('Иванов',i),CONCAT('ivan_ivanov',i,'@mail.ru'), (SELECT RIGHT(RAND(), 11)));
+	SET i = i+1;
+	END WHILE;
+END//
+
+CALL million_users ();
+
 # task_2.1
 
 sadd ip_address 192.168.0.1 192.168.0.2 192.168.0.3
@@ -35,3 +50,4 @@ get email
 db.shop.insert({"catalog":[{id:["1","2","3"]},{"name":["comp","phone","tv"]}]})
 db.shop.insert({products:[{id:'1'},{name:'tv samsung'},{description:'korea'},{price:'200'},{catalog_id:'2'}]})
 db.shop.insert({users:[{id:''},{name:''},{birthday_at:''},{created_at:''}]})
+
