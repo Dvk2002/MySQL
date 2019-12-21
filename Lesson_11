@@ -1,0 +1,18 @@
+# task_1
+
+CREATE TABLE logs (
+id int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+sourse varchar(255) NOT NULL,
+name varchar(255) NOT NULL,
+created_at datetime DEFAULT CURRENT_TIMESTAMP
+) 
+ENGINE Archive;
+
+-- Пример триггера --
+
+CREATE TRIGGER catalogs_update AFTER insert ON catalogs
+FOR EACH ROW
+BEGIN 
+	INSERT INTO logs(sourse, name) VALUES
+	('catalog', new.name);
+END//
