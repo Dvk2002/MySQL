@@ -24,7 +24,7 @@ CREATE PROCEDURE million_users ()
 BEGIN
 	DECLARE i int (255);
 	SET i = 1;
-	WHILE i<10 Do
+	WHILE i<1000000 Do
 	INSERT INTO users (first_name, last_name, email, phone) VALUES
 	(CONCAT('Иван',i), CONCAT('Иванов',i),CONCAT('ivan_ivanov',i,'@mail.ru'), (SELECT RIGHT(RAND(), 11)));
 	SET i = i+1;
