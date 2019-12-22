@@ -1,6 +1,5 @@
 CREATE DATABASE li_chess;
 
-DROP TABLE users;
 
 CREATE TABLE users(
 id SERIAL PRIMARY KEY,
@@ -47,7 +46,7 @@ start_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 status varchar (256),
 winner int
 );
-DROP TABLE message;
+
 CREATE TABLE message (
 id serial PRIMARY KEY,
 from_user_id int,
