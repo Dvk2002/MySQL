@@ -11,6 +11,7 @@ created_at datetime DEFAULT CURRENT_TIMESTAMP
 CREATE TABLE profile(
 user_id int NOT NULL PRIMARY KEY,
 country varchar(256),
+location varchar(256),
 user_rating int,
 email varchar(256) UNIQUE NOT NULL
 );
