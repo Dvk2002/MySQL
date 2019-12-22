@@ -1,10 +1,11 @@
 CREATE DATABASE li_chess;
 
+DROP TABLE users;
 
 CREATE TABLE users(
 id SERIAL PRIMARY KEY,
 name varchar(255), 
-created_at datetime
+created_at datetime DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE profile(
@@ -41,26 +42,28 @@ id serial PRIMARY KEY,
 name varchar (256),
 type_game varchar (256),
 club_id varchar (256),
-start_at datetime NOT NULL,
+start_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 status varchar (256),
 winner int
 );
-
+DROP TABLE message;
 CREATE TABLE message (
 id serial PRIMARY KEY,
 from_user_id int,
 to_user_id int,
 body text (65535),
-created_at datetime
+created_at datetime DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TABLE clubs;
 CREATE TABLE clubs(
 id serial PRIMARY KEY,
 name varchar (150),
-created_at timestamp,
+created_at timestamp DEFAULT CURRENT_TIMESTAMP,
 is_closed bool
 );
 
+DROP TABLE clubs_members;
 CREATE TABLE clubs_members(
 club_id int,
 user_id int,
