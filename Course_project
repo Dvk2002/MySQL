@@ -50,7 +50,7 @@ status varchar (256),
 winner int
 );
 
-CREATE TABLE message (
+CREATE TABLE messages (
 id serial PRIMARY KEY,
 from_user_id int,
 to_user_id int,
