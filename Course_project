@@ -1,0 +1,68 @@
+CREATE DATABASE li_chess;
+
+
+CREATE TABLE users(
+id SERIAL PRIMARY KEY,
+name varchar(255), 
+created_at datetime
+);
+
+CREATE TABLE profile(
+user_id int NOT NULL PRIMARY KEY,
+country varchar(256),
+user_rating int,
+email varchar(256) UNIQUE NOT NULL
+);
+
+CREATE TABLE games(
+id SERIAL PRIMARY KEY,
+type_game varchar(256),
+white int NOT NULL  comment'user_id',
+black int NOT NULL  comment 'user_id',
+status varchar(150),
+`result_game` int UNSIGNED comment '1 - white winner, 0- black winner, 0,5 - draw',
+tournament varchar(256)
+);
+
+
+CREATE TABLE type_game(
+id serial PRIMARY KEY,
+name varchar(256)
+);
+
+CREATE TABLE status_game(
+id serial PRIMARY KEY,
+name varchar(256)
+);
+
+DROP TABLE tournaments;
+CREATE TABLE tournaments(
+id serial PRIMARY KEY,
+name varchar (256),
+type_game varchar (256),
+club_id varchar (256),
+start_at datetime NOT NULL,
+status varchar (256),
+winner int
+);
+
+CREATE TABLE message (
+id serial PRIMARY KEY,
+from_user_id int,
+to_user_id int,
+body text (65535),
+created_at datetime
+);
+
+CREATE TABLE clubs(
+id serial PRIMARY KEY,
+name varchar (150),
+created_at timestamp,
+is_closed bool
+);
+
+CREATE TABLE clubs_members(
+club_id int,
+user_id int,
+is_admin bool,
+is_banned TINYTEXT);
