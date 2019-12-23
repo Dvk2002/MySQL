@@ -90,6 +90,9 @@ CONSTRAINT clubs_members_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
 UPDATE games SET white = white + 1
 WHERE white = black;
 
+UPDATE messages SET from_user_id = from_user_id + 1
+WHERE from_user_id = to_user_id;
+
 UPDATE status_game SET name = 'not started' WHERE id=1; 
 UPDATE status_game SET name = 'playing'WHERE id=2;
 UPDATE status_game SET name = 'finished'WHERE id=3;
