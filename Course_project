@@ -82,3 +82,14 @@ is_banned TINYTEXT,
 CONSTRAINT clubs_members_club_id_fk FOREIGN KEY (club_id) REFERENCES clubs(id),
 CONSTRAINT clubs_members_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+
+-- Корректировка тестовых данных --
+
+
+UPDATE games SET white = white + 1
+WHERE white = black;
+
+UPDATE status_game SET name = 'not started' WHERE id=1; 
+UPDATE status_game SET name = 'playing'WHERE id=2;
+UPDATE status_game SET name = 'finished'WHERE id=3;
