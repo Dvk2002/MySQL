@@ -1,10 +1,9 @@
 CREATE DATABASE li_chess;
 
+
 CREATE TABLE users(
 id int  AUTO_INCREMENT PRIMARY KEY,
-name varchar(255), 
-created_at datetime DEFAULT CURRENT_TIMESTAMP
-);
+name varchar(255));
 
 
 CREATE TABLE profile(
@@ -13,7 +12,7 @@ country varchar(256),
 location varchar(256),
 user_rating int,
 email varchar(256) UNIQUE NOT NULL,
-CONSTRAINT profile_white_fk FOREIGN KEY (user_id) REFERENCES users(id)
+created_at datetime DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -23,13 +22,10 @@ type_game_id int,
 white int NOT NULL  comment'user_id',
 black int NOT NULL  comment 'user_id',
 status_id int,
-`result_game` int UNSIGNED comment '1 - white winner, 0- black winner, 0,5 - draw',
+result_game int UNSIGNED comment '1 - white winner, 0- black winner, 0,5 - draw',
 tournament_id int,
-CONSTRAINT games_type_game_id_fk FOREIGN KEY (type_game_id) REFERENCES types_game(id),
-CONSTRAINT games_white_fk FOREIGN KEY (white) REFERENCES users(id),
-CONSTRAINT games_black_fk FOREIGN KEY (black) REFERENCES users(id),
-CONSTRAINT games_status_id_fk FOREIGN KEY (status_id) REFERENCES status_game(id),
-CONSTRAINT games_tournament_id_fk FOREIGN KEY (tournament_id) REFERENCES tournaments(id)
+start_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+finished_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -49,22 +45,16 @@ name varchar (256),
 type_game_id int,
 club_id int,
 start_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+finished_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 status_id int,
-winner_id int,
-CONSTRAINT tournaments_type_game_id_fk FOREIGN KEY (type_game_id) REFERENCES types_game(id),
-CONSTRAINT tournaments_club_id_fk FOREIGN KEY (club_id) REFERENCES clubs(id),
-CONSTRAINT tournaments_status_id_fk FOREIGN KEY (status_id) REFERENCES status_game(id),
-CONSTRAINT tournaments_winner_id_fk FOREIGN KEY (winner_id) REFERENCES users(id)
-);
+winner_id int);
 
 CREATE TABLE messages (
 id int  AUTO_INCREMENT PRIMARY KEY,
 from_user_id int,
 to_user_id int,
-body text (65535),
-created_at datetime DEFAULT CURRENT_TIMESTAMP,
-CONSTRAINT messages_from_user_id_fk FOREIGN KEY (from_user_id) REFERENCES users(id),
-CONSTRAINT messages_to_user_id_fk FOREIGN KEY (to_user_id) REFERENCES users(id)
+body TEXT (65535),
+created_at timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE clubs(
@@ -78,27 +68,56 @@ CREATE TABLE clubs_members(
 club_id int,
 user_id int,
 is_admin bool,
-is_banned TINYTEXT,
-CONSTRAINT clubs_members_club_id_fk FOREIGN KEY (club_id) REFERENCES clubs(id),
-CONSTRAINT clubs_members_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
+is_banned bool
+);
+
+CREATE TABLE subscribes (
+user_id int not null,
+to_user_id int not null
+);
+
+CREATE TABLE languages (
+id int AUTO_INCREMENT PRIMARY KEY,
+name varchar(256)
 );
 
 
--- Корректировка тестовых данных --
+CREATE TABLE trainers (
+id int AUTO_INCREMENT PRIMARY KEY,
+name varchar(256) NOT NULL,
+rating int,
+location varchar(256),
+speak_language varchar(256),
+ratio_for_hour int,
+availibility bool
+);
+
+CREATE TABLE boards (
+id int AUTO_INCREMENT PRIMARY KEY,
+name JSON
+);
 
 
-UPDATE games SET white = white + 1
-WHERE white = black;
+CREATE TABLE figures_types (
+id int AUTO_INCREMENT PRIMARY KEY,
+name JSON
+);
 
-UPDATE messages SET from_user_id = from_user_id + 1
-WHERE from_user_id = to_user_id;
 
-UPDATE status_game SET name = 'not started' WHERE id=1; 
-UPDATE status_game SET name = 'playing'WHERE id=2;
-UPDATE status_game SET name = 'finished'WHERE id=3;
+CREATE TABLE theams(
+id int AUTO_INCREMENT PRIMARY KEY,
+name JSON
+);
 
-UPDATE types_game SET name = 'bullet' WHERE id=1; 
-UPDATE types_game SET name = 'blitz'WHERE id=2;
-UPDATE types_game SET name = 'rapid'WHERE id=3;
-UPDATE types_game SET name = 'classical' WHERE id=4;
-UPDATE types_game SET name = 'individual' WHERE id=5;
+CREATE TABLE figures (
+id int AUTO_INCREMENT PRIMARY KEY,
+name varchar(16)
+);
+
+CREATE TABLE moves (
+game_id int NOT NULL,
+move_number int,
+user_id int NOT NULL,
+figure_id int,
+`field` int
+);
