@@ -96,13 +96,15 @@ availibility bool
 
 CREATE TABLE boards (
 id int AUTO_INCREMENT PRIMARY KEY,
-name JSON
+name varchar(16),
+board JSON
 );
 
 
 CREATE TABLE figures_types (
 id int AUTO_INCREMENT PRIMARY KEY,
-name JSON
+name varchar(16),
+figures_type JSON
 );
 
 
@@ -124,6 +126,7 @@ CREATE TABLE settings(
 id int AUTO_INCREMENT PRIMARY KEY,
 user_id int,
 boards_id int,
+language_id int,
 figures_type_id int,
 theam_id int
 );
@@ -146,7 +149,13 @@ INSERT INTO theams(name) VALUES
 ('Dark'), ('Light'), ('Shapes'),('Anthracite'), ('Blue Maze'),('Red Maze'), ('Wood');
 
 INSERT INTO languages(name) VALUES
-('English'), ('French'), ('German'),('Russian'), ('Spain'),('Japon'), ('Italian');
+('English'), ('French'), ('German'),('Russian'), ('Spain'),('Chinese'), ('Italian');
+
+INSERT INTO boards(name) VALUES
+('Brown'), ('Blue'), ('Grey'),('Purple'), ('Wood'),('Maple');
+
+INSERT INTO figures_types(name) VALUES
+('Merida'), ('Pirouetti'), ('Alpha'),('Spatial'), ('Companion'),('Leipzig');
 
 UPDATE games g,(SELECT t.start_a, t.id as id 
 FROM games g 
