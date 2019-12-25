@@ -120,6 +120,14 @@ shot_name varchar(16),
 pict json
 );
 
+CREATE TABLE settings(
+id int AUTO_INCREMENT PRIMARY KEY,
+user_id int,
+boards_id int,
+figures_type_id int,
+theam_id int
+);
+
 CREATE TABLE moves (
 game_id int NOT NULL,
 move_number int,
