@@ -109,9 +109,12 @@ id int AUTO_INCREMENT PRIMARY KEY,
 name JSON
 );
 
-CREATE TABLE figures (
+DROP TABLE figures;
+CREATE TABLE figures(
 id int AUTO_INCREMENT PRIMARY KEY,
-name varchar(16)
+name varchar(16),
+shot_name varchar(16),
+pict json
 );
 
 CREATE TABLE moves (
