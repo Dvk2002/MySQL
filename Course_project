@@ -140,11 +140,18 @@ INSERT INTO theams(name) VALUES
 INSERT INTO languages(name) VALUES
 ('English'), ('French'), ('German'),('Russian'), ('Spain'),('Japon'), ('Italian');
 
+UPDATE games g,(SELECT t.start_a, t.id as id 
+FROM games g 
+LEFT JOIN tournaments t on t.id = g.type_game_id)
+as s
+SET g.start_at = s.start_at 
+WHERE s.id = g.type_game_id;
+
 UPDATE status_game SET name ='not_started' WHERE id = 1;
 UPDATE status_game SET name ='playing' WHERE id = 2;
 UPDATE status_game SET name ='finished' WHERE id = 3;
 
-UPDATE types_game SET name = 'bulluet', game_time = '0:03:00' WHERE id = 1;
+UPDATE types_game SET name = 'bullet', game_time = '0:03:00' WHERE id = 1;
 UPDATE types_game SET name = 'blitz', game_time = '0:05:00' WHERE id = 2;
 UPDATE types_game SET name = 'rapid', game_time = '0:10:00' WHERE id = 3;
 UPDATE types_game SET name = 'classical', game_time = '0:15:00' WHERE id = 4;
@@ -157,3 +164,6 @@ UPDATE games SET finished_at = start_at + INTERVAL 10*1.8 MINUTE  WHERE type_gam
 UPDATE games SET finished_at = start_at + INTERVAL 15*1.8 MINUTE  WHERE type_game_id = 4;
 UPDATE games SET finished_at = start_at + INTERVAL 3 HOUR  WHERE type_game_id = 5;
 UPDATE games SET result_game = 0.5 WHERE result_game = 5;
+
+UPDATE messages SET from_user_id = from_user_id+3 WHERE from_user_id = to_user_id;
+UPDATE subscribes SET user_id = user_id + 1 WHERE user_id = to_user_id;
