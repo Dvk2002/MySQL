@@ -3,7 +3,8 @@ CREATE DATABASE li_chess;
 
 CREATE TABLE users(
 id int  AUTO_INCREMENT PRIMARY KEY,
-name varchar(255));
+name varchar(255)
+);
 
 
 CREATE TABLE profile(
@@ -22,21 +23,22 @@ type_game_id int,
 white int NOT NULL  comment'user_id',
 black int NOT NULL  comment 'user_id',
 status_id int,
-result_game int UNSIGNED comment '1 - white winner, 0- black winner, 0,5 - draw',
+result_game float UNSIGNED comment '1 - white winner, 0- black winner, 0,5 - draw',
 tournament_id int,
 start_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 finished_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
-CREATE TABLE types_game(
+CREATE TABLE status_game(
 id int  AUTO_INCREMENT PRIMARY KEY,
 name varchar(256)
 );
 
-CREATE TABLE status_game(
+CREATE TABLE types_game(
 id int  AUTO_INCREMENT PRIMARY KEY,
-name varchar(256)
+name varchar(256),
+game_time time
 );
 
 CREATE TABLE tournaments(
@@ -106,7 +108,8 @@ name JSON
 
 CREATE TABLE theams(
 id int AUTO_INCREMENT PRIMARY KEY,
-name JSON
+name varchar(16), 
+theam JSON
 );
 
 DROP TABLE figures;
@@ -124,3 +127,33 @@ user_id int NOT NULL,
 figure_id int,
 `field` int
 );
+
+
+-- Вставка значений --
+
+INSERT INTO figures(name, shot_name) VALUES
+('king', 'K'), ('queen','Q'), ('rook','R'), ('knight','N'),('bishop','B'),('pawn','P');
+
+INSERT INTO theams(name) VALUES
+('Dark'), ('Light'), ('Shapes'),('Anthracite'), ('Blue Maze'),('Red Maze'), ('Wood');
+
+INSERT INTO languages(name) VALUES
+('English'), ('French'), ('German'),('Russian'), ('Spain'),('Japon'), ('Italian');
+
+UPDATE status_game SET name ='not_started' WHERE id = 1;
+UPDATE status_game SET name ='playing' WHERE id = 2;
+UPDATE status_game SET name ='finished' WHERE id = 3;
+
+UPDATE types_game SET name = 'bulluet', game_time = '0:03:00' WHERE id = 1;
+UPDATE types_game SET name = 'blitz', game_time = '0:05:00' WHERE id = 2;
+UPDATE types_game SET name = 'rapid', game_time = '0:10:00' WHERE id = 3;
+UPDATE types_game SET name = 'classical', game_time = '0:15:00' WHERE id = 4;
+UPDATE types_game SET name = 'custom' WHERE id = 5;
+
+UPDATE games SET white = white+3 WHERE white = black;
+UPDATE games SET finished_at = start_at + INTERVAL 3*1.8 MINUTE  WHERE type_game_id = 1;
+UPDATE games SET finished_at = start_at + INTERVAL 5*1.8 MINUTE  WHERE type_game_id = 2;
+UPDATE games SET finished_at = start_at + INTERVAL 10*1.8 MINUTE  WHERE type_game_id = 3;
+UPDATE games SET finished_at = start_at + INTERVAL 15*1.8 MINUTE  WHERE type_game_id = 4;
+UPDATE games SET finished_at = start_at + INTERVAL 3 HOUR  WHERE type_game_id = 5;
+UPDATE games SET result_game = 0.5 WHERE result_game = 5;
