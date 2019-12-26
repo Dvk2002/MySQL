@@ -8,7 +8,7 @@ name varchar(255)
 
 
 CREATE TABLE profile(
-user_id int,
+user_id int  PRIMARY KEY,
 country varchar(256),
 location varchar(256),
 user_rating int,
@@ -89,13 +89,20 @@ language_id int,
 trainer_id int
 );
 
+CREATE TABLE trainers_profiles (
+trainer_id int  PRIMARY KEY,
+country varchar(256),
+location varchar(256),
+rating int,
+ratio_for_hour int,
+email varchar(256) UNIQUE NOT NULL,
+availibility bool,
+created_at datetime DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE trainers (
 id int AUTO_INCREMENT PRIMARY KEY,
 name varchar(256) NOT NULL,
-rating int,
-location varchar(256),
-ratio_for_hour int,
-availibility bool
 );
 
 CREATE TABLE boards (
@@ -229,3 +236,5 @@ ALTER TABLE subscribes ADD CONSTRAINT PRIMARY KEY (user_id,to_user_id);
 
 ALTER TABLE speak_languages ADD CONSTRAINT speak_languages_trainer_id_fk FOREIGN KEY (trainer_id) REFERENCES trainers(id);
 ALTER TABLE speak_languages ADD CONSTRAINT speak_languages_language_id_fk FOREIGN KEY (language_id) REFERENCES languages(id);
+
+ALTER TABLE trainers_profiles ADD CONSTRAINT trainers_profiles_trainer_id_fk FOREIGN KEY (trainer_id) REFERENCES trainers(id);
