@@ -184,3 +184,41 @@ UPDATE games SET result_game = 0.5 WHERE result_game = 5;
 
 UPDATE messages SET from_user_id = from_user_id+3 WHERE from_user_id = to_user_id;
 UPDATE subscribes SET user_id = user_id + 1 WHERE user_id = to_user_id;
+
+
+
+-- Ограничения --
+
+ALTER TABLE clubs_members ADD CONSTRAINT clubs_members_club_id_fk FOREIGN KEY (club_id) REFERENCES clubs(id);
+ALTER TABLE clubs_members ADD CONSTRAINT clubs_members_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id);
+
+ALTER TABLE tournaments ADD CONSTRAINT tournaments_type_game_id_fk FOREIGN KEY (type_game_id) REFERENCES types_game(id);
+ALTER TABLE tournaments ADD CONSTRAINT tournaments_club_id_fk FOREIGN KEY (club_id) REFERENCES clubs(id);
+ALTER TABLE tournaments ADD CONSTRAINT tournaments_status_id_fk FOREIGN KEY (status_id) REFERENCES status_game(id);
+ALTER TABLE tournaments ADD CONSTRAINT tournaments_winner_id_fk FOREIGN KEY (winner_id) REFERENCES users(id);
+
+
+ALTER TABLE games ADD CONSTRAINT games_type_game_id_fk FOREIGN KEY (type_game_id) REFERENCES types_game(id);
+ALTER TABLE games ADD CONSTRAINT games_white_fk FOREIGN KEY (white) REFERENCES users(id);
+ALTER TABLE games ADD CONSTRAINT games_black_fk FOREIGN KEY (black) REFERENCES users(id);
+ALTER TABLE games ADD CONSTRAINT games_status_id_fk FOREIGN KEY (status_id) REFERENCES status_game(id);
+ALTER TABLE games ADD CONSTRAINT games_tournament_id_fk FOREIGN KEY (tournament_id) REFERENCES tournaments(id);
+
+ALTER TABLE messages ADD CONSTRAINT messages_from_user_id_fk FOREIGN KEY (from_user_id) REFERENCES users(id);
+ALTER TABLE messages ADD CONSTRAINT messages_to_user_id_fk FOREIGN KEY (to_user_id) REFERENCES users(id);
+
+ALTER TABLE moves ADD CONSTRAINT moves_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE moves ADD CONSTRAINT moves_figure_id_fk FOREIGN KEY (figure_id) REFERENCES figures(id);
+ALTER TABLE moves ADD CONSTRAINT moves_game_id_fk FOREIGN KEY (game_id) REFERENCES games(id);
+
+ALTER TABLE profile ADD  CONSTRAINT profile_white_fk FOREIGN KEY (user_id) REFERENCES users(id);
+
+ALTER TABLE settings ADD CONSTRAINT settings_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE settings ADD CONSTRAINT settings_board_id_fk FOREIGN KEY (board_id) REFERENCES boards(id);
+ALTER TABLE settings ADD CONSTRAINT settings_language_id_fk FOREIGN KEY (language_id) REFERENCES languages(id);
+ALTER TABLE settings ADD CONSTRAINT settings_figures_type_id_fk FOREIGN KEY (figures_type_id) REFERENCES figures_types(id);
+ALTER TABLE settings ADD CONSTRAINT settings_theam_id_fk FOREIGN KEY (theam_id) REFERENCES theams(id);
+
+ALTER TABLE subscribes ADD CONSTRAINT subscribes_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE subscribes ADD CONSTRAINT subscribes_to_user_id_fk FOREIGN KEY (to_user_id) REFERENCES users(id);
+ALTER TABLE subscribes ADD CONSTRAINT PRIMARY KEY (user_id,to_user_id);
