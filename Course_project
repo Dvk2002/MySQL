@@ -168,9 +168,10 @@ INSERT INTO boards(name) VALUES
 INSERT INTO figures_types(name) VALUES
 ('Merida'), ('Pirouetti'), ('Alpha'),('Spatial'), ('Companion'),('Leipzig');
 
-UPDATE games g,(SELECT t.start_a, t.id as id 
-FROM games g 
-LEFT JOIN tournaments t on t.id = g.type_game_id)
+UPDATE games g,(SELECT DISTINCT  t.start_at, t.id 
+FROM tournaments t 
+LEFT JOIN games g   
+on t.id = g.type_game_id)
 as s
 SET g.start_at = s.start_at 
 WHERE s.id = g.type_game_id;
