@@ -83,13 +83,17 @@ id int AUTO_INCREMENT PRIMARY KEY,
 name varchar(256)
 );
 
+CREATE TABLE speak_languages(
+id int AUTO_INCREMENT PRIMARY KEY,
+language_id int,
+trainer_id int
+);
 
 CREATE TABLE trainers (
 id int AUTO_INCREMENT PRIMARY KEY,
 name varchar(256) NOT NULL,
 rating int,
 location varchar(256),
-speak_language varchar(256),
 ratio_for_hour int,
 availibility bool
 );
@@ -222,3 +226,6 @@ ALTER TABLE settings ADD CONSTRAINT settings_theam_id_fk FOREIGN KEY (theam_id) 
 ALTER TABLE subscribes ADD CONSTRAINT subscribes_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id);
 ALTER TABLE subscribes ADD CONSTRAINT subscribes_to_user_id_fk FOREIGN KEY (to_user_id) REFERENCES users(id);
 ALTER TABLE subscribes ADD CONSTRAINT PRIMARY KEY (user_id,to_user_id);
+
+ALTER TABLE speak_languages ADD CONSTRAINT speak_languages_trainer_id_fk FOREIGN KEY (trainer_id) REFERENCES trainers(id);
+ALTER TABLE speak_languages ADD CONSTRAINT speak_languages_language_id_fk FOREIGN KEY (language_id) REFERENCES languages(id);
