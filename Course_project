@@ -168,13 +168,15 @@ INSERT INTO boards(name) VALUES
 INSERT INTO figures_types(name) VALUES
 ('Merida'), ('Pirouetti'), ('Alpha'),('Spatial'), ('Companion'),('Leipzig');
 
-UPDATE games g,(SELECT DISTINCT  t.start_at, t.id 
-FROM tournaments t 
-LEFT JOIN games g   
-on t.id = g.type_game_id)
-as s
-SET g.start_at = s.start_at 
-WHERE s.id = g.type_game_id;
+UPDATE games g, tournaments t
+SET g.type_game_id = LEFT(t.id,1)
+WHERE t.id = g.tournament_id;
+
+UPDATE games g, tournaments t
+SET g.start_at = t.start_at
+WHERE t.id = g.type_game_id;
+
+UPDATE settings  SET user_id = id;
 
 UPDATE status_game SET name ='not_started' WHERE id = 1;
 UPDATE status_game SET name ='playing' WHERE id = 2;
@@ -196,6 +198,8 @@ UPDATE games SET result_game = 0.5 WHERE result_game = 5;
 
 UPDATE messages SET from_user_id = from_user_id+3 WHERE from_user_id = to_user_id;
 UPDATE subscribes SET user_id = user_id + 1 WHERE user_id = to_user_id;
+
+
 
 
 
@@ -225,6 +229,7 @@ ALTER TABLE moves ADD CONSTRAINT moves_game_id_fk FOREIGN KEY (game_id) REFERENC
 
 ALTER TABLE profile ADD  CONSTRAINT profile_white_fk FOREIGN KEY (user_id) REFERENCES users(id);
 
+ALTER TABLE settings MODIFY user_id int UNIQUE;
 ALTER TABLE settings ADD CONSTRAINT settings_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id);
 ALTER TABLE settings ADD CONSTRAINT settings_board_id_fk FOREIGN KEY (board_id) REFERENCES boards(id);
 ALTER TABLE settings ADD CONSTRAINT settings_language_id_fk FOREIGN KEY (language_id) REFERENCES languages(id);
@@ -239,3 +244,19 @@ ALTER TABLE speak_languages ADD CONSTRAINT speak_languages_trainer_id_fk FOREIGN
 ALTER TABLE speak_languages ADD CONSTRAINT speak_languages_language_id_fk FOREIGN KEY (language_id) REFERENCES languages(id);
 
 ALTER TABLE trainers_profiles ADD CONSTRAINT trainers_profiles_trainer_id_fk FOREIGN KEY (trainer_id) REFERENCES trainers(id);
+
+
+-- Запросы --
+
+-- Победители завершенных турниров --
+
+SELECT  u.id, u.name, t.name FROM users u, tournaments t
+WHERE t.status_id = 3 AND t.winner_id = u.id;
+
+-- Количество русскоязычных подписчиков у пользователя '47' --
+
+SELECT DISTINCT COUNT(*) FROM 
+subscribes sb
+LEFT JOIN settings st
+ON sb.user_id = st.user_id
+WHERE sb.to_user_id=47 AND st.language_id=4;
