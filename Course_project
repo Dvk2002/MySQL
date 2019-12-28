@@ -19,6 +19,7 @@ created_at datetime DEFAULT CURRENT_TIMESTAMP
 
 CREATE TABLE games(
 id int  AUTO_INCREMENT PRIMARY KEY,
+user_id int,
 type_game_id int,
 white int NOT NULL  comment'user_id',
 black int NOT NULL  comment 'user_id',
@@ -172,6 +173,10 @@ UPDATE games g, tournaments t
 SET g.type_game_id = LEFT(t.id,1)
 WHERE t.id = g.tournament_id;
 
+UPDATE games g, tournaments t 
+SET g.status_id = t.status_id 
+WHERE g.tournament_id = t.id; 
+
 UPDATE games g, tournaments t
 SET g.start_at = t.start_at
 WHERE t.id = g.type_game_id;
@@ -229,7 +234,8 @@ ALTER TABLE moves ADD CONSTRAINT moves_game_id_fk FOREIGN KEY (game_id) REFERENC
 
 ALTER TABLE profile ADD  CONSTRAINT profile_white_fk FOREIGN KEY (user_id) REFERENCES users(id);
 
-ALTER TABLE settings MODIFY user_id int UNIQUE;
+ALTER TABLE settings DROP id;
+ALTER TABLE settings MODIFY user_id int UNIQUE PRIMARY KEY;
 ALTER TABLE settings ADD CONSTRAINT settings_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id);
 ALTER TABLE settings ADD CONSTRAINT settings_board_id_fk FOREIGN KEY (board_id) REFERENCES boards(id);
 ALTER TABLE settings ADD CONSTRAINT settings_language_id_fk FOREIGN KEY (language_id) REFERENCES languages(id);
@@ -253,10 +259,35 @@ ALTER TABLE trainers_profiles ADD CONSTRAINT trainers_profiles_trainer_id_fk FOR
 SELECT  u.id, u.name, t.name FROM users u, tournaments t
 WHERE t.status_id = 3 AND t.winner_id = u.id;
 
--- Количество русскоязычных подписчиков у пользователя '47' --
 
-SELECT DISTINCT COUNT(*) FROM 
+-- Количество русскоязычных подписчиков у пользователя '40' --
+
+SELECT DISTINCT COUNT(*)  FROM 
 subscribes sb
-LEFT JOIN settings st
+left JOIN settings st
 ON sb.user_id = st.user_id
-WHERE sb.to_user_id=47 AND st.language_id=4;
+WHERE sb.to_user_id=40 AND st.language_id =4;
+
+
+-- Количество очков, которое набрал игрок 'quam' в турнире 'Okuneva-Will' --
+
+SELECT SUM(s.result_game) as total_scores FROM
+(SELECT  u.id,g.result_game as result_game FROM
+games g
+LEFT JOIN
+users u
+ON u.id=g.white
+LEFT JOIN 
+tournaments t
+ON g.tournament_id = t.id
+WHERE t.name = 'Okuneva-Will' AND u.name = 'quam'
+UNION ALL
+SELECT u.id, (1-g.result_game) as result_game FROM
+games g
+LEFT JOIN
+users u
+ON u.id=g.black
+LEFT JOIN 
+tournaments t
+ON g.tournament_id = t.id
+WHERE t.name = 'Okuneva-Will' AND u.name = 'quam') as s;
