@@ -333,5 +333,56 @@ ON t.id = tp.trainer_id
 WHERE tp.availibility = 1;
 
 
+      -- Функции --
+      
   
+  -- Подсчет очков игрока в турнире --
+  
+  CREATE FUNCTION scores_sum (u1 int, t1 int)
+RETURNS float(5,1) DETERMINISTIC
+
+BEGIN
+
+RETURN(
+SELECT SUM(s.result_game) as total_scores FROM
+(SELECT  u.id,g.result_game as result_game FROM
+games g
+LEFT JOIN
+users u
+ON u.id=g.white
+WHERE g.tournament_id = t1 AND u.id = u1
+UNION ALL
+SELECT u.id, (1-g.result_game) as result_game FROM
+games g
+LEFT JOIN
+users u
+ON u.id=g.black
+WHERE g.tournament_id = t1 AND u.id = u1) as s);	
+	
+END //
+
+
+     --Триггеры--
+     
+     -- Установка winner_id после окончания турнира--
+     
+     CREATE TRIGGER set_tournament_winner AFTER UPDATE on tournaments
+for EACH ROW
+BEGIN	
+IF (t.NEW.status_id = 2) THEN 
+UPDATE  tournaments t,(SELECT u.id as uid, t.id as tid 
+FROM users u
+JOIN games g
+ON u.id = g.black or u.id = g.white
+JOIN tournaments t
+ON g.tournament_id = t.id
+JOIN profile p 
+ON u.id=p.user_id
+WHERE t.id = 6
+ORDER BY scores_sum(u.id, t.id) DESC, user_rating DESC LIMIT 1) as s 
+SET t.winner_id = s.uid
+WHERE s.tid = t.id
+;
+END IF;
+END//  
   
