@@ -307,3 +307,31 @@ ON t.id = g.tournament_id
 WHERE t.name = 'Roberts-Graham'
 GROUP by cl.id
 order by amount_of_members DESC limit 1;
+
+
+      -- Представления --
+      
+      
+      
+  -- Текущие турниры --
+  
+CREATE VIEW current_tournaments as 
+SELECT  DISTINCT t.name, tg.name as type_game, t.start_at 
+FROM tournaments t
+LEFT JOIN types_game tg
+ON tg.id = t.type_game_id
+WHERE t.status_id = 2;
+
+-- Доступные тренеры --
+
+CREATE VIEW available_trainers as 
+SELECT t.id, t.name, tp.ratio_for_hour FROM
+trainers t
+JOIN
+trainers_profiles tp 
+ON t.id = tp.trainer_id
+WHERE tp.availibility = 1;
+
+
+  
+  
