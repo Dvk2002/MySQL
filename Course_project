@@ -291,3 +291,19 @@ LEFT JOIN
 tournaments t
 ON g.tournament_id = t.id
 WHERE t.name = 'Okuneva-Will' AND u.name = 'quam') as s;
+
+
+
+-- Самый представленный клуб в турнире 'Roberts-Graham' --
+
+SELECT  cl.id, cl.name, COUNT(*) as amount_of_members
+FROM games g
+JOIN clubs_members cm
+ON g.white = cm.user_id OR g.black = cm.user_id
+JOIN clubs cl
+ON cm.club_id = cl.id
+JOIN tournaments t
+ON t.id = g.tournament_id
+WHERE t.name = 'Roberts-Graham'
+GROUP by cl.id
+order by amount_of_members DESC limit 1;
