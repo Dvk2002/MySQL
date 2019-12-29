@@ -371,7 +371,7 @@ END //
 for EACH ROW
 BEGIN	
 IF (t.NEW.status_id = 2) THEN 
-UPDATE  tournaments t,(SELECT u.id as uid, t.id as tid 
+UPDATE  tournaments t,(SELECT DISTINCT u.id as uid, t.id as tid 
 FROM users u
 JOIN games g
 ON u.id = g.black or u.id = g.white
