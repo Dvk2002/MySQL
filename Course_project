@@ -365,6 +365,7 @@ END //
      --Триггеры--
      
      -- Установка winner_id после окончания турнира--
+     -- При равенстве очков дополнительным показателем является рейтинг игрока --
      
      CREATE TRIGGER set_tournament_winner AFTER UPDATE on tournaments
 for EACH ROW
