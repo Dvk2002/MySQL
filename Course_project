@@ -49,8 +49,7 @@ type_game_id int,
 club_id int,
 start_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 finished_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-status_id int,
-winner_id int);
+status_id int);
 
 CREATE TABLE tournaments_winners (
 tournament_id int PRIMARY KEY,
@@ -174,6 +173,14 @@ INSERT INTO boards(name) VALUES
 INSERT INTO figures_types(name) VALUES
 ('Merida'), ('Pirouetti'), ('Alpha'),('Spatial'), ('Companion'),('Leipzig');
 
+-- Устанавливаем  значения winner_id в tournaments_winners --
+
+UPDATE tournaments
+SET 
+status_id = 3
+WHERE status_id =3;
+
+
 UPDATE games g, tournaments t
 SET g.type_game_id = LEFT(t.id,1)
 WHERE t.id = g.tournament_id;
@@ -256,13 +263,26 @@ ALTER TABLE speak_languages ADD CONSTRAINT speak_languages_language_id_fk FOREIG
 
 ALTER TABLE trainers_profiles ADD CONSTRAINT trainers_profiles_trainer_id_fk FOREIGN KEY (trainer_id) REFERENCES trainers(id);
 
+ALTER TABLE tournaments_winners ADD CONSTRAINT tournaments_winners_tournament_id_fk FOREIGN KEY (tournament_id) REFERENCES tournaments(id);
+ALTER TABLE tournaments_winners ADD CONSTRAINT tournaments_winners_winner_id_fk FOREIGN KEY (winner_id) REFERENCES users(id);
+
+
+   -- Индексы --
+   
+CREATE INDEX games_status_id_idx ON games(status_id);
+CREATE INDEX games_type_game_id_idx ON games(type_game_id);
+CREATE INDEX tournaments_status_id_idx ON tournaments(status_id);
+CREATE INDEX tournaments_type_game_id_idx ON tournaments(status_id);
+CREATE INDEX moves_game_id_user_id_move_number_idx ON moves (game_id,user_id,move_number);
+
+
 
 -- Запросы --
 
 -- Победители завершенных турниров --
 
-SELECT  u.id, u.name, t.name FROM users u, tournaments t
-WHERE t.status_id = 3 AND t.winner_id = u.id;
+SELECT  u.id, u.name, t.name FROM users u, tournaments t, tournaments_winners tw
+WHERE t.status_id = 3 AND tw.winner_id = u.id;
 
 
 -- Количество русскоязычных подписчиков у пользователя '40' --
@@ -296,6 +316,19 @@ LEFT JOIN
 tournaments t
 ON g.tournament_id = t.id
 WHERE t.name = 'Okuneva-Will' AND u.name = 'quam') as s;
+
+-- Таблица турнира с id = 6 --
+
+SELECT DISTINCT u.id, u.name, p.country, scores_sum(u.id, t.id) as scores, p.user_rating
+FROM users u
+JOIN games g
+ON u.id = g.black or u.id = g.white
+JOIN tournaments t
+ON g.tournament_id = t.id
+JOIN profile p 
+ON u.id=p.user_id
+WHERE t.id =6
+ORDER BY scores DESC , user_rating DESC; 
 
 
 
@@ -336,6 +369,16 @@ JOIN
 trainers_profiles tp 
 ON t.id = tp.trainer_id
 WHERE tp.availibility = 1;
+
+-- Действующие клубы --
+
+CREATE VIEW open_clubs as 
+SELECT DISTINCT   c.id, c.name,
+COUNT(cm.user_id) OVER(PARTITION BY cm.club_id) as amount_of_members 
+FROM clubs c
+JOIN clubs_members cm
+on cm.club_id = c.id
+WHERE is_closed is NULL;
 
 
       -- Функции --
