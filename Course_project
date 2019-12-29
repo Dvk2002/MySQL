@@ -216,6 +216,10 @@ UPDATE games SET result_game = 0.5 WHERE result_game = 5;
 UPDATE messages SET from_user_id = from_user_id+3 WHERE from_user_id = to_user_id;
 UPDATE subscribes SET user_id = user_id + 1 WHERE user_id = to_user_id;
 
+UPDATE games 
+SET tournament_id = NULL 
+WHERE id %30 = 0;
+
 
 
 
