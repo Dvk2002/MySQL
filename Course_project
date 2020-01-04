@@ -391,7 +391,7 @@ WHERE is_closed is NULL;
   -- Подсчет очков игрока в турнире --
   
   CREATE FUNCTION scores_sum (u1 int, t1 int)
-RETURNS float(5,1) DETERMINISTIC
+RETURNS float(5,1) MODIFIES SQL DATA
 
 BEGIN
 
